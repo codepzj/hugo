@@ -59,17 +59,27 @@ jobs:
       # 检出代码
       - name: Checkout Your Repository
         uses: actions/checkout@v4
-
-      # 设置 Hugo
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: "latest"
-          extended: true
+          submodules: recursive  # 处理子模块
+
+      # 安装Hugo CLI
+      - name: Install Hugo
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.120.2/hugo_extended_0.120.2_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+
+      # 安装Dart Sass
+      - name: Install Dart Sass
+        run: sudo snap install dart-sass
+
+      # 设置 Hugo 环境变量
+      - name: Set Environment Variables
+        run: echo "HUGO_ENVIRONMENT=production" >> $GITHUB_ENV
 
       # 构建 Hugo 网站
       - name: Build Hugo Site
-        run: hugo --minify  # 使用 --minify 选项进行压缩构建
+        run: |
+          hugo --gc --minify
 
       # 复制构建的文件到服务器
       - name: Copy Dist Files with SCP
