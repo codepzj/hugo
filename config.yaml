@@ -1,0 +1,51 @@
+title: "浩瀚星河"
+paginate: 8         # 每页显示的文章条数
+buildfuture: true   # 解决时区问题
+relativeURLs: true
+
+theme: hugo-stellar
+
+params:
+  author: 浩瀚星河
+  avatar: /avatar.jpg
+  logo: /favicon.ico
+
+  description:
+  - "A Go Enthusiast"
+  - "实习前的些许风霜罢了"
+
+  notice: 本站是浩瀚星河的知识库和项目集合站，希望您在这里玩的开心。
+
+  social:
+  - name: "hugo"
+    url: "https://gohugo.io/"
+    logo: "/social/hugo.png"
+  - name: "github"
+    url: "https://github.com/"
+    logo: "/social/github.svg"
+  - name: "bilibili"
+    url: "https://space.bilibili.com/"
+    logo: "/social/bilibili.ico"
+
+menus:
+  main:
+  - name: "博客"
+    weight: 1
+    url: "/"
+    params:
+      tabs:
+      - name: "所有文章"
+        url: "/"
+      - name: "分类"
+        url: "/categories/"
+      - name: "标签"
+        url: "/tags/"
+      - name: "归档"
+        url: "/archives/"
+  - name: "关于"
+    weight: 2
+    url: "/about/"
+    params:
+      tabs:
+      - name: "关于本站"
+        url: "/about/"

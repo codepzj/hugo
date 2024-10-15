@@ -1,0 +1,82 @@
+name: deploy-hugo-site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  update_theme:
+    runs-on: ubuntu-latest
+    steps:
+      # 检出代码
+      - name: Checkout Your Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false  # 禁用GITHUB_TOKEN凭证，以便可以使用git
+
+      # 克隆主题仓库
+      - name: Clone Hugo Theme Repository
+        run: |
+          git clone --depth 1 https://github.com/Yharimium/hugo-stellar themes/hugo-stellar
+
+      # 检查是否有更新（通过时间戳）
+      - name: Check for Updates
+        id: check_updates
+        run: |
+          cd themes/hugo-stellar
+          remote_commit_time=$(git log -1 --format=%ct)
+          cd ../../
+          local_commit_time=$(git log -1 --format=%ct -- ./themes/hugo-stellar)
+          if [ "$remote_commit_time" -gt "$local_commit_time" ]; then
+            echo "发现有更新"
+            echo "::set-output name=update_needed::true"
+          else
+            echo "没有更新"
+            echo "::set-output name=update_needed::false"
+          fi
+
+      # 只有当远程仓库有更新时，才进行覆盖操作
+      - name: Copy and Overwrite Theme Files
+        if: steps.check_updates.outputs.update_needed == 'true'
+        run: |
+          cp -r --force themes/hugo-stellar/* ./themes/hugo-stellar/
+
+      # 提交更新并推送到你的仓库
+      - name: Commit and Push Changes
+        if: steps.check_updates.outputs.update_needed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./themes/hugo-stellar
+          git commit -m "Update Hugo theme to latest version" || echo "没有要提交的更改"
+          git push origin ${{ github.ref }} || echo "推送失败，请检查仓库设置。"
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    needs: update_theme  # 确保先更新主题
+    steps:
+      # 检出代码
+      - name: Checkout Your Repository
+        uses: actions/checkout@v4
+
+      # 安装 Hugo
+      - name: Install Hugo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y hugo
+
+      # 构建 Hugo 网站
+      - name: Build Hugo Site
+        run: hugo --minify  # 使用 --minify 选项进行压缩构建
+
+      # 复制构建的文件到服务器
+      - name: Copy Dist Files with SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HUGO_HOST }}
+          username: ${{ secrets.HUGO_USERNAME }}
+          password: ${{ secrets.HUGO_PASSWORD }}
+          port: ${{ secrets.HUGO_PORT }}
+          source: "public/"
+          target: ${{ secrets.HUGO_TARGET }}
