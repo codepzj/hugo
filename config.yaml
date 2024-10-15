@@ -8,7 +8,7 @@ theme: hugo-stellar
 params:
   author: 浩瀚星河
   avatar: /avatar.jpg
-  logo: /favicon.ico
+  logo: /avatar.jpg
 
   description:
   - "A Go Enthusiast"
@@ -19,13 +19,13 @@ params:
   social:
   - name: "hugo"
     url: "https://gohugo.io/"
-    logo: "/social/hugo.png"
+    logo: "/social/hugo.svg"
   - name: "github"
     url: "https://github.com/"
     logo: "/social/github.svg"
   - name: "bilibili"
     url: "https://space.bilibili.com/"
-    logo: "/social/bilibili.ico"
+    logo: "/social/bilibili.svg"
 
 menus:
   main:
