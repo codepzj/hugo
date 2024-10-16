@@ -15,11 +15,6 @@ jobs:
         with:
           submodules: true  # 处理子模块
           
-      # 更新子模块
-      - name: Update submodules
-        run: git submodule update --init --recursive
-
-      # 安装Hugo CLI
       - name: Install Hugo
         run: |
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.120.2/hugo_extended_0.120.2_linux-amd64.deb \

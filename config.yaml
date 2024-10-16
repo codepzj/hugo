@@ -5,6 +5,12 @@ relativeURLs: true
 
 theme: hugo-stellar
 
+markup:
+  _merge: deep # 删除此项将导致代码块渲染异常
+  tableOfContents: # 以下配置表明文章的目录将只包括 h1 ~ h4
+    startLevel: 1
+    endLevel: 4
+
 params:
   author: 浩瀚星河
   avatar: /avatar.jpg
@@ -42,8 +48,15 @@ menus:
         url: "/tags/"
       - name: "归档"
         url: "/archives/"
-  - name: "关于"
+  - name: "文档"
     weight: 2
+    url: "/docs/"
+    params:
+      tabs:
+      - name: "所有文档"
+        url: "/docs/"
+  - name: "关于"
+    weight: 3
     url: "/about/"
     params:
       tabs:
