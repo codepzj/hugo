@@ -22,6 +22,8 @@ params:
 
   notice: 本站是浩瀚星河的知识库和项目集合站，希望您在这里玩的开心。
 
+  copyright: 粤ICP备2024275864号
+
   social:
   - name: "hugo"
     url: "https://gohugo.io/"
