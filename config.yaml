@@ -48,15 +48,8 @@ menus:
         url: "/tags/"
       - name: "归档"
         url: "/archives/"
-  - name: "文档"
-    weight: 2
-    url: "/docs/"
-    params:
-      tabs:
-      - name: "所有文档"
-        url: "/docs/"
   - name: "关于"
-    weight: 3
+    weight: 2
     url: "/about/"
     params:
       tabs:
